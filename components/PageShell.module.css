@@ -1,0 +1,34 @@
+/* Three-column page shell: gray side panels (15% each) flank a center
+   panel that occupies 70% of the screen width. */
+
+.shell {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+.sidePanel {
+  flex: 0 0 15%;
+  width: 15%;
+  background: #9aa3ad;
+}
+
+.centerPanel {
+  flex: 0 0 70%;
+  width: 70%;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* On narrow screens the center panel takes the full width and the gray
+   side panels drop out. */
+@media (max-width: 900px) {
+  .sidePanel {
+    display: none;
+  }
+
+  .centerPanel {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}

@@ -1,0 +1,82 @@
+/* Shared page layout for the tabbed pages (Dashboard, Total Comp,
+   Portfolio & Banking, Benefits). */
+
+/* Width is constrained by the PageShell center panel (70% of screen). */
+
+.pageMain {
+  width: 100%;
+  padding: 14px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+/* Tiles keep their own card chrome; the grid only stacks them flush
+   (no gaps between tiles). */
+
+.tileGrid {
+  display: grid;
+  gap: 0;
+}
+
+.cols4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.cols3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.cols2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.quickLinks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Bare text links — no card chrome, blends into the gray page background. */
+.quickLink {
+  display: block;
+  text-align: center;
+  padding: 4px 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+@media (max-width: 1000px) {
+  .cols4,
+  .cols3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .cols4,
+  .cols3,
+  .cols2 {
+    grid-template-columns: 1fr;
+  }
+
+  .quickLinks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

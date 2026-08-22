@@ -1,0 +1,143 @@
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 42%, var(--bg) 42.1%, var(--bg) 100%);
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(10, 37, 64, 0.18);
+  padding: 32px;
+}
+
+.loginBrand {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.brandMark {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.loginTitle {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.loginSubtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 16px 0 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 108, 255, 0.15);
+}
+
+.passwordWrap {
+  position: relative;
+}
+
+.passwordWrap .input {
+  padding-right: 44px;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.eyeBtn:hover {
+  color: var(--navy);
+}
+
+.forgotRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0 4px;
+  font-size: 13px;
+}
+
+.loginError {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  background: #fdeceb;
+  color: var(--red);
+  border: 1px solid #f5c6c2;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.loginBtn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.loginBtn:hover:not(:disabled) {
+  background: var(--navy-light);
+}
+
+.loginBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.demoHint {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}

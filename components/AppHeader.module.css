@@ -1,0 +1,109 @@
+.appHeader {
+  background: var(--navy);
+  color: #fff;
+}
+
+/* Width is constrained by the PageShell center panel (70% of screen). */
+
+.headerInner {
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.headerBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.brandMarkLight {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabNav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tab {
+  color: rgba(255, 255, 255, 0.75);
+  padding: 6px 10px;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.tab:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  text-decoration: none;
+}
+
+.tabActive,
+.tabActive:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.headerUser {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.welcome {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.logoutBtn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 6px 12px;
+  border-radius: 0;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+@media (max-width: 900px) {
+  .headerInner {
+    flex-wrap: wrap;
+  }
+
+  .tabNav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .welcome {
+    display: none;
+  }
+}

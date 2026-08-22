@@ -1,0 +1,24 @@
+/* DraggableTileGrid cells: grab affordance + drag-state feedback. The cell is
+   the grid item, so it flexes to let the tile inside fill it — tiles in a row
+   stay equal height, as they were when rendered as direct grid children. */
+
+.cell {
+  display: flex;
+  cursor: grab;
+}
+
+.cell > * {
+  flex: 1;
+}
+
+.cell:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  opacity: 0.4;
+}
+
+.dropTarget {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}

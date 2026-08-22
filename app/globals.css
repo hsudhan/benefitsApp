@@ -1,0 +1,42 @@
+/* Global design tokens + base styles only. Component styles live in
+   co-located CSS modules (see components/*.module.css). */
+
+:root {
+  --navy: #0a2540;
+  --navy-light: #123b66;
+  --bg: #f3f5f7;
+  --card: #ffffff;
+  --text: #000000;
+  --muted: #5f6b7a;
+  --border: #e3e8ee;
+  --accent: #0a6cff;
+  --green: #157f3d;
+  --red: #c4372f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
