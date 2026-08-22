@@ -285,7 +285,13 @@
   color: var(--muted);
 }
 
-/* Portfolio tile: black bar image + tiny icon + centered label */
+/* Portfolio tile: black bar image + tiny icon + centered label. No card
+   chrome (transparent background, no border/padding/shadow) so adjacent
+   bars pack flush against each other and the quick-links row below. */
+
+.qaTile {
+  position: relative;
+}
 
 .blackBar {
   display: block;
@@ -295,14 +301,14 @@
   border-radius: 0;
 }
 
-/* Icon floats centered inside the black bar (top = tile padding 10px +
-   half of (bar 28px - icon 18px)); taken out of flow so the label sits
-   directly under the bar. invert() turns the baked-in white background
-   black (which screen blending drops into the bar) and the dark strokes
-   light, so the glyph reads on the black bar. */
+/* Icon floats centered inside the black bar (top = half of bar 28px -
+   icon 18px); taken out of flow so the label sits directly under the bar.
+   invert() turns the baked-in white background black (which screen blending
+   drops into the bar) and the dark strokes light, so the glyph reads on the
+   black bar. */
 .qaIcon {
   position: absolute;
-  top: 15px;
+  top: 5px;
   left: 50%;
   transform: translateX(-50%);
   width: 18px;

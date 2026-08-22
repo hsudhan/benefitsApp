@@ -36,11 +36,13 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* Sits flush under the quick-action black bars — no top margin, so the
+   bars and the link row read as one packed block. */
 .quickLinks {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 0;
 }
 
 /* Bare text links — no card chrome, blends into the gray page background. */
