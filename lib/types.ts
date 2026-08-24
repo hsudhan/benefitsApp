@@ -126,6 +126,32 @@ export interface EquityReportDTO {
   lastUpdated?: string
 }
 
+/** A single holding/liability row in the balance sheet's holdings table.
+ *  Values arrive as exact display text (e.g. "$842,400", "-$38,200") because
+ *  the spec mixes formats. Maroon tone flags liabilities (negative values);
+ *  undefined renders black. */
+export interface BalanceSheetHoldingDTO {
+  id: string
+  investmentType: string
+  investmentValue: string
+  valueTone?: 'black' | 'maroon'
+}
+
+/** Dashboard balance sheet tile (single-row resource): big bold report type,
+ *  feed type row, a white sub-tile pairing a circular stock-percent
+ *  thermometer (max 100) with the stock type, and a second white sub-tile
+ *  with the holdings table plus a bold total row. */
+export interface BalanceSheetDTO {
+  id: string
+  reportType: string
+  feedType: string
+  stockType: string
+  stockPercent: number
+  holdings: BalanceSheetHoldingDTO[]
+  totalType: string
+  totalValue: string
+}
+
 /** Compensation breakdown (Total Comp page): rows of type/amount/percent
  *  with a teal thermometer, plus the total compensation figure. */
 export interface CompBreakdownRowDTO {

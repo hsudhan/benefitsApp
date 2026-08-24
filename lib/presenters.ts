@@ -3,6 +3,7 @@
 // complex inline JS — they only render props.
 
 import type {
+  BalanceSheetDTO,
   BenefitTileDTO,
   CompBreakdownDTO,
   CompScenariosDTO,
@@ -164,6 +165,51 @@ export type NetWorthTileView = NetWorthTileDTO
 
 export function toNetWorthTileView(tile: NetWorthTileDTO): NetWorthTileView {
   return tile
+}
+
+/** Dashboard balance sheet tile: report/feed rows pass through; the stock
+ *  percent is formatted for display and bucketed to a discrete gauge class
+ *  key so the circular thermometer needs no inline styles. Holdings pass
+ *  their display text straight through with the tone defaulted to black. */
+export interface BalanceSheetHoldingView {
+  id: string
+  investmentType: string
+  investmentValue: string
+  valueTone: 'black' | 'maroon'
+}
+
+export interface BalanceSheetView {
+  id: string
+  reportType: string
+  feedType: string
+  stockType: string
+  stockPercent: number
+  stockPercentText: string
+  /** CSS-module class key for the circular gauge arc, e.g. 'gaugeFill70'. */
+  gaugeFillClassKey: string
+  holdings: BalanceSheetHoldingView[]
+  totalType: string
+  totalValue: string
+}
+
+export function toBalanceSheetView(report: BalanceSheetDTO): BalanceSheetView {
+  return {
+    id: report.id,
+    reportType: report.reportType,
+    feedType: report.feedType,
+    stockType: report.stockType,
+    stockPercent: report.stockPercent,
+    stockPercentText: `${report.stockPercent}%`,
+    gaugeFillClassKey: `gauge${utilizationWidthKey(report.stockPercent).replace(/^fill/, 'Fill')}`,
+    holdings: report.holdings.map((holding) => ({
+      id: holding.id,
+      investmentType: holding.investmentType,
+      investmentValue: holding.investmentValue,
+      valueTone: holding.valueTone ?? 'black',
+    })),
+    totalType: report.totalType,
+    totalValue: report.totalValue,
+  }
 }
 
 /** Quick-action (portfolio) tiles: resolve the tiny icon shown under the

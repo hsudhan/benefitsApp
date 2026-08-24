@@ -5,6 +5,7 @@
 
 import { Pool } from 'pg'
 import type {
+  BalanceSheetDTO,
   BenefitTileDTO,
   CompBreakdownDTO,
   CompBreakdownRowDTO,
@@ -105,6 +106,23 @@ interface EquityGrantRow {
   value_text: string
   description: string
   status: 'VESTED' | 'UNVESTED'
+}
+
+interface BalanceSheetRow {
+  id: string
+  report_type: string
+  feed_type: string
+  stock_type: string
+  stock_percent: number
+  total_type: string
+  total_value: string
+}
+
+interface BalanceSheetHoldingRow {
+  id: string
+  investment_type: string
+  investment_value: string
+  value_tone: 'black' | 'maroon' | null
 }
 
 interface CompBreakdownRowRecord {
@@ -327,6 +345,39 @@ export class PostgresBenefitsRepository implements BenefitsRepository {
       grants,
       stockType: row.stock_type ?? undefined,
       lastUpdated: row.last_updated ?? undefined,
+    }
+  }
+
+  async getBalanceSheet(): Promise<BalanceSheetDTO> {
+    const { rows } = await this.pool.query<BalanceSheetRow>(
+      `SELECT id, report_type, feed_type, stock_type, stock_percent,
+              total_type, total_value
+         FROM balance_sheet
+        ORDER BY id
+        LIMIT 1`
+    )
+    const row = rows[0]
+    const { rows: holdingRows } = await this.pool.query<BalanceSheetHoldingRow>(
+      `SELECT id, investment_type, investment_value, value_tone
+         FROM balance_sheet_holdings
+        WHERE balance_sheet_id = $1
+        ORDER BY position`,
+      [row.id]
+    )
+    return {
+      id: row.id,
+      reportType: row.report_type,
+      feedType: row.feed_type,
+      stockType: row.stock_type,
+      stockPercent: row.stock_percent,
+      holdings: holdingRows.map((holding) => ({
+        id: holding.id,
+        investmentType: holding.investment_type,
+        investmentValue: holding.investment_value,
+        valueTone: holding.value_tone ?? undefined,
+      })),
+      totalType: row.total_type,
+      totalValue: row.total_value,
     }
   }
 

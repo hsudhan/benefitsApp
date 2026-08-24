@@ -13,10 +13,10 @@ import DraggableTileGrid from '@/components/DraggableTileGrid'
 import NetWorthTile from '@/components/tiles/NetWorthTile'
 import PortfolioTile from '@/components/tiles/PortfolioTile'
 import EquityReportTile from '@/components/tiles/EquityReportTile'
+import BalanceSheetTile from '@/components/tiles/BalanceSheetTile'
 import { useDashboard } from '@/lib/hooks/useDashboard'
-import { toNetWorthTileView, toPortfolioTileView } from '@/lib/presenters'
+import { toBalanceSheetView, toNetWorthTileView, toPortfolioTileView } from '@/lib/presenters'
 import styles from './AppPage.module.css'
-import tileStyles from './tiles/Tiles.module.css'
 
 const SECTION_COPY = {
   networth: { title: 'Net Worth' },
@@ -78,7 +78,7 @@ export default function Dashboard() {
         <section aria-label="Equity report">
           <div className={`${styles.tileGrid} ${styles.cols2}`}>
             <EquityReportTile report={data.equityReport} />
-            <div className={tileStyles.tile} aria-label="Report placeholder" />
+            <BalanceSheetTile report={toBalanceSheetView(data.balanceSheet)} />
           </div>
         </section>
       </main>

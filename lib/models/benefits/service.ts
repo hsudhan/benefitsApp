@@ -3,6 +3,7 @@
 // request/response objects. This keeps every layer independently replaceable.
 
 import type {
+  BalanceSheetDTO,
   BenefitTileDTO,
   CompBreakdownDTO,
   CompScenariosDTO,
@@ -46,6 +47,10 @@ export async function getNetWorthTiles(): Promise<NetWorthTileDTO[]> {
 
 export async function getEquityReport(): Promise<EquityReportDTO> {
   return getBenefitsRepository().getEquityReport()
+}
+
+export async function getBalanceSheet(): Promise<BalanceSheetDTO> {
+  return getBenefitsRepository().getBalanceSheet()
 }
 
 export async function getCompBreakdown(): Promise<CompBreakdownDTO> {

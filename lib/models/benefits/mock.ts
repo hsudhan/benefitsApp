@@ -2,6 +2,7 @@
 // when DATA_SOURCE=mock.
 
 import type {
+  BalanceSheetDTO,
   BenefitTileDTO,
   CompBreakdownDTO,
   CompScenariosDTO,
@@ -242,6 +243,32 @@ const equityReport: EquityReportDTO = {
   lastUpdated: 'Updated 30 mins ago)',
 }
 
+const balanceSheet: BalanceSheetDTO = {
+  id: 'balance-sheet',
+  reportType: 'Balance Sheet',
+  feedType: 'Taxable/Non taxable',
+  stockType: 'PLTR',
+  stockPercent: 68,
+  holdings: [
+    { id: 'pltr-equity', investmentType: 'PLTR Equity (Taxable)', investmentValue: '$842,400' },
+    {
+      id: '401k-fidelity',
+      investmentType: '401K - Fidelity (Non-taxable)',
+      investmentValue: '$187,320',
+    },
+    { id: 'roth-ira', investmentType: 'ROTH IRA (Non-taxable)', investmentValue: '$42,100' },
+    { id: 'citi-banking', investmentType: 'Citi Banking', investmentValue: '$67,840' },
+    {
+      id: 'student-loan',
+      investmentType: 'Student Loan (Liability)',
+      investmentValue: '-$38,200',
+      valueTone: 'maroon',
+    },
+  ],
+  totalType: 'Total Net Worth',
+  totalValue: '$1,101,500',
+}
+
 const compBreakdown: CompBreakdownDTO = {
   rows: [
     { id: 'base-salary', compType: 'Base Salary', compAmount: 185000, compPercent: 59.3 },
@@ -293,6 +320,10 @@ export class MockBenefitsRepository implements BenefitsRepository {
 
   async getEquityReport(): Promise<EquityReportDTO> {
     return equityReport
+  }
+
+  async getBalanceSheet(): Promise<BalanceSheetDTO> {
+    return balanceSheet
   }
 
   async getCompBreakdown(): Promise<CompBreakdownDTO> {

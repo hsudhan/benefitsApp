@@ -4,7 +4,7 @@
 
 BEGIN;
 
-DROP TABLE IF EXISTS benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, equity_report, equity_grants, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
+DROP TABLE IF EXISTS benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
 
 -- BenefitTileDTO (summary resource)
 CREATE TABLE benefit_tiles (
@@ -129,6 +129,32 @@ CREATE TABLE equity_grants (
   value_text       TEXT     NOT NULL,
   description      TEXT     NOT NULL,
   status           TEXT     NOT NULL CHECK (status IN ('VESTED', 'UNVESTED')),
+  position         SMALLINT NOT NULL
+);
+
+-- BalanceSheetDTO (dashboard balance sheet resource): single-row table for
+-- the "Balance Sheet" report tile and its circular stock-percent thermometer.
+-- total_type/total_value carry the bold "Total Net Worth" row rendered last
+-- in the holdings table.
+CREATE TABLE balance_sheet (
+  id            TEXT     NOT NULL PRIMARY KEY,
+  report_type   TEXT     NOT NULL,
+  feed_type     TEXT     NOT NULL,
+  stock_type    TEXT     NOT NULL,
+  stock_percent SMALLINT NOT NULL CHECK (stock_percent BETWEEN 0 AND 100),
+  total_type    TEXT     NOT NULL,
+  total_value   TEXT     NOT NULL
+);
+
+-- BalanceSheetHoldingDTO: ordered holding/liability rows belonging to a
+-- balance_sheet (rendered in the second white sub-tile). value_tone 'maroon'
+-- flags liabilities (negative values); NULL renders black.
+CREATE TABLE balance_sheet_holdings (
+  id               TEXT     NOT NULL PRIMARY KEY,
+  balance_sheet_id TEXT     NOT NULL REFERENCES balance_sheet (id) ON DELETE CASCADE,
+  investment_type  TEXT     NOT NULL,
+  investment_value TEXT     NOT NULL,
+  value_tone       TEXT     CHECK (value_tone IN ('black', 'maroon')),
   position         SMALLINT NOT NULL
 );
 

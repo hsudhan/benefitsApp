@@ -3,6 +3,7 @@
 // tomorrow) without touching controllers, services, or the client.
 
 import type {
+  BalanceSheetDTO,
   BenefitTileDTO,
   CompBreakdownDTO,
   CompScenariosDTO,
@@ -24,6 +25,7 @@ export interface BenefitsRepository {
   getRetirementTiles(): Promise<RetirementTileDTO[]>
   getNetWorthTiles(): Promise<NetWorthTileDTO[]>
   getEquityReport(): Promise<EquityReportDTO>
+  getBalanceSheet(): Promise<BalanceSheetDTO>
   getCompBreakdown(): Promise<CompBreakdownDTO>
   getCompScenarios(): Promise<CompScenariosDTO>
 }

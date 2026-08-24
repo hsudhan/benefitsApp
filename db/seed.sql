@@ -4,7 +4,7 @@
 
 BEGIN;
 
-TRUNCATE benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, equity_report, equity_grants, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
+TRUNCATE benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
 
 INSERT INTO benefit_tiles
   (id, title, variant, amount, description, trend_direction, trend_percent, expiry_date, date, position)
@@ -88,6 +88,16 @@ INSERT INTO equity_grants (id, equity_report_id, shares_text, value_text, descri
   ('grant-a', 'pltr-rsu-holdings', '2324 shares', '$283,327', 'Grant A - Dec 2021 Grant price $18.42', 'VESTED', 1),
   ('grant-b', 'pltr-rsu-holdings', '1850 shares', '$283,327', 'Grant B - Jan 2023 Grant price $6.72', 'UNVESTED', 2),
   ('grant-c', 'pltr-rsu-holdings', '2770 shares', '$283,327', 'Grant C - Feb 2024 Grant price $21.33', 'UNVESTED', 3);
+
+INSERT INTO balance_sheet (id, report_type, feed_type, stock_type, stock_percent, total_type, total_value) VALUES
+  ('balance-sheet', 'Balance Sheet', 'Taxable/Non taxable', 'PLTR', 68, 'Total Net Worth', '$1,101,500');
+
+INSERT INTO balance_sheet_holdings (id, balance_sheet_id, investment_type, investment_value, value_tone, position) VALUES
+  ('pltr-equity', 'balance-sheet', 'PLTR Equity (Taxable)', '$842,400', NULL, 1),
+  ('401k-fidelity', 'balance-sheet', '401K - Fidelity (Non-taxable)', '$187,320', NULL, 2),
+  ('roth-ira', 'balance-sheet', 'ROTH IRA (Non-taxable)', '$42,100', NULL, 3),
+  ('citi-banking', 'balance-sheet', 'Citi Banking', '$67,840', NULL, 4),
+  ('student-loan', 'balance-sheet', 'Student Loan (Liability)', '-$38,200', 'maroon', 5);
 
 INSERT INTO comp_breakdown (id, comp_type, comp_amount, comp_percent, position) VALUES
   ('base-salary', 'Base Salary', 185000.00, 59.3, 1),

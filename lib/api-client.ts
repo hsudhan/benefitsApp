@@ -4,6 +4,7 @@
 
 import type {
   ApiErrorBody,
+  BalanceSheetDTO,
   BenefitTileDTO,
   CompBreakdownDTO,
   CompScenariosDTO,
@@ -90,6 +91,10 @@ export function fetchNetWorthTiles(): Promise<NetWorthTileDTO[]> {
 
 export function fetchEquityReport(): Promise<EquityReportDTO> {
   return request('/api/benefits/equity-report')
+}
+
+export function fetchBalanceSheet(): Promise<BalanceSheetDTO> {
+  return request('/api/benefits/balance-sheet')
 }
 
 export function fetchCompBreakdown(): Promise<CompBreakdownDTO> {

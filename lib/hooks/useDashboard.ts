@@ -5,6 +5,7 @@
 // contract.
 
 import {
+  fetchBalanceSheet,
   fetchCurrentUser,
   fetchEquityReport,
   fetchNetWorthTiles,
@@ -14,6 +15,7 @@ import {
 import { useLogout } from '@/lib/hooks/useLogout'
 import { useResources, type ResourceState } from '@/lib/hooks/useResources'
 import type {
+  BalanceSheetDTO,
   EquityReportDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
@@ -27,20 +29,22 @@ export interface DashboardData {
   portfolio: PortfolioTileDTO[]
   quickLinks: QuickLinkDTO[]
   equityReport: EquityReportDTO
+  balanceSheet: BalanceSheetDTO
 }
 
 export type DashboardState = ResourceState<DashboardData>
 
 export function useDashboard(): { state: DashboardState; handleLogout: () => Promise<void> } {
   const state = useResources<DashboardData>(async () => {
-    const [user, networth, portfolio, quickLinks, equityReport] = await Promise.all([
+    const [user, networth, portfolio, quickLinks, equityReport, balanceSheet] = await Promise.all([
       fetchCurrentUser(),
       fetchNetWorthTiles(),
       fetchPortfolioTiles(),
       fetchQuickLinks(),
       fetchEquityReport(),
+      fetchBalanceSheet(),
     ])
-    return { user, networth, portfolio, quickLinks, equityReport }
+    return { user, networth, portfolio, quickLinks, equityReport, balanceSheet }
   })
   const handleLogout = useLogout()
   return { state, handleLogout }

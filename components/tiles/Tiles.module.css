@@ -179,6 +179,111 @@
   color: var(--muted);
 }
 
+/* Balance sheet tile (Dashboard): white sub-tile top row pairs a circular
+   stock-percent thermometer (left) with the stock type + bold percent. */
+
+.stockGaugeRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stockType {
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.stockPercent {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: #000;
+}
+
+/* Circular thermometer — gray track ring, teal arc swept clockwise from 12
+   o'clock (svg rotated -90°); discrete dash classes (no inline styles). */
+
+.gauge {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  transform: rotate(-90deg);
+}
+
+.gaugeTrack {
+  fill: none;
+  stroke: #dfe4ea;
+  stroke-width: 4;
+}
+
+.gaugeFill {
+  fill: none;
+  stroke: #008080;
+  stroke-width: 4;
+}
+
+.gaugeFill0 { stroke-dasharray: 0 100; }
+.gaugeFill5 { stroke-dasharray: 5 100; }
+.gaugeFill10 { stroke-dasharray: 10 100; }
+.gaugeFill15 { stroke-dasharray: 15 100; }
+.gaugeFill20 { stroke-dasharray: 20 100; }
+.gaugeFill25 { stroke-dasharray: 25 100; }
+.gaugeFill30 { stroke-dasharray: 30 100; }
+.gaugeFill35 { stroke-dasharray: 35 100; }
+.gaugeFill40 { stroke-dasharray: 40 100; }
+.gaugeFill45 { stroke-dasharray: 45 100; }
+.gaugeFill50 { stroke-dasharray: 50 100; }
+.gaugeFill55 { stroke-dasharray: 55 100; }
+.gaugeFill60 { stroke-dasharray: 60 100; }
+.gaugeFill65 { stroke-dasharray: 65 100; }
+.gaugeFill70 { stroke-dasharray: 70 100; }
+.gaugeFill75 { stroke-dasharray: 75 100; }
+.gaugeFill80 { stroke-dasharray: 80 100; }
+.gaugeFill85 { stroke-dasharray: 85 100; }
+.gaugeFill90 { stroke-dasharray: 90 100; }
+.gaugeFill95 { stroke-dasharray: 95 100; }
+.gaugeFill100 { stroke-dasharray: 100 100; }
+
+/* Balance sheet holdings table (second white sub-tile): holding/liability
+   rows, bold right-aligned values; maroon flags liabilities, and the closing
+   total row is bold in both columns. */
+
+.whiteTileBelow {
+  margin-top: 8px;
+}
+
+.holdingsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.holdingsTable td {
+  border: none;
+  padding: 2px 0;
+  vertical-align: top;
+}
+
+.holdingType {
+  font-size: 13px;
+  color: #000;
+}
+
+.holdingTypeBold {
+  font-weight: 700;
+}
+
+.holdingValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  text-align: right;
+}
+
+.valueMaroon {
+  color: #800000;
+}
+
 /* Compensation breakdown tile (Total Comp) */
 
 .breakBlock {
