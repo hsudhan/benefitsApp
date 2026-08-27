@@ -4,7 +4,7 @@
 
 BEGIN;
 
-DROP TABLE IF EXISTS benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
+DROP TABLE IF EXISTS benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, priority_actions, priority_action_items, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
 
 -- BenefitTileDTO (summary resource)
 CREATE TABLE benefit_tiles (
@@ -95,15 +95,39 @@ CREATE TABLE quick_links (
 
 -- NetWorthTileDTO (dashboard net-worth resource) — its own table. Amounts
 -- are exact display text because the spec mixes compact and full formats.
+-- tile_tone 'gray' renders the tile on #f3f5f7 (dashboard tiles 1 & 2);
+-- NULL renders the default card white.
 CREATE TABLE networth_tiles (
   id               TEXT     NOT NULL PRIMARY KEY,
   title            TEXT     NOT NULL,
   value_text       TEXT     NOT NULL,
   description      TEXT,
   description_tone TEXT     CHECK (description_tone IN ('plain', 'green')),
+  tile_tone        TEXT     CHECK (tile_tone IN ('white', 'gray')),
   action_label     TEXT,
   action_href      TEXT,
   position         SMALLINT NOT NULL UNIQUE
+);
+
+-- PriorityActionsDTO (dashboard priority actions resource): single-row table
+-- for the "Priority Items" tile header.
+CREATE TABLE priority_actions (
+  id            TEXT NOT NULL PRIMARY KEY,
+  actions_title TEXT NOT NULL
+);
+
+-- PriorityActionDTO: ordered action tiles belonging to a priority_actions
+-- panel (rendered side by side in the white panel). action_label/action_href
+-- carry the gray oval button with blue foreground.
+CREATE TABLE priority_action_items (
+  id                  TEXT     NOT NULL PRIMARY KEY,
+  priority_actions_id TEXT     NOT NULL REFERENCES priority_actions (id) ON DELETE CASCADE,
+  action_category     TEXT     NOT NULL,
+  action_title        TEXT     NOT NULL,
+  action_description  TEXT     NOT NULL,
+  action_label        TEXT     NOT NULL,
+  action_href         TEXT     NOT NULL,
+  position            SMALLINT NOT NULL
 );
 
 -- EquityReportDTO (dashboard equity report resource): single-row table for

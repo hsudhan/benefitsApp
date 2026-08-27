@@ -12,6 +12,7 @@ import type {
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
+  PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
 } from '@/lib/types'
@@ -19,6 +20,10 @@ import { getBenefitsRepository } from './index'
 
 export async function getSummaryTiles(): Promise<BenefitTileDTO[]> {
   return getBenefitsRepository().getSummaryTiles()
+}
+
+export async function getPriorityActions(): Promise<PriorityActionsDTO> {
+  return getBenefitsRepository().getPriorityActions()
 }
 
 export async function getCompTiles(): Promise<CompTileDTO[]> {

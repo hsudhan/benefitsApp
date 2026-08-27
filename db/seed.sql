@@ -4,7 +4,7 @@
 
 BEGIN;
 
-TRUNCATE benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
+TRUNCATE benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, priority_actions, priority_action_items, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
 
 INSERT INTO benefit_tiles
   (id, title, variant, amount, description, trend_direction, trend_percent, expiry_date, date, position)
@@ -71,12 +71,25 @@ INSERT INTO health_tiles (id, title, status, description, utilization, stat, pos
    36, '$5000', 6);
 
 INSERT INTO networth_tiles
-  (id, title, value_text, description, description_tone, action_label, action_href, position)
+  (id, title, value_text, description, description_tone, tile_tone, action_label, action_href, position)
 VALUES
-  ('net-worth', 'Net Worth', '$1.24M', '12.4 TYD', 'green', NULL, NULL, 1),
-  ('pltr-equity-value', 'PLTR Equity Value', '$842K', '68% Conc.', 'plain', NULL, NULL, 2),
-  ('total-compensation', 'Total Compensation', '$312K', '2024 annual total', 'plain', NULL, NULL, 3),
-  ('unclaimed-benefits', 'Unclaimed Benefits', '$4,820', NULL, NULL, 'claim now', '#claim', 4);
+  ('net-worth', 'Net Worth', '$1.24M', '12.4 TYD', 'green', 'gray', NULL, NULL, 1),
+  ('pltr-equity-value', 'PLTR Equity Value', '$842K', '68% Conc.', 'plain', 'gray', NULL, NULL, 2),
+  ('total-compensation', 'Total Compensation', '$312K', '2024 annual total', 'plain', NULL, NULL, NULL, 3),
+  ('unclaimed-benefits', 'Unclaimed Benefits', '$4,820', NULL, NULL, NULL, 'claim now', '#claim', 4);
+
+INSERT INTO priority_actions (id, actions_title) VALUES
+  ('priority-actions', 'Priority Items');
+
+INSERT INTO priority_action_items
+  (id, priority_actions_id, action_category, action_title, action_description, action_label, action_href, position)
+VALUES
+  ('rebalance', 'priority-actions', 'REBALANCE', 'Rebalance Portfolio',
+   'Stock allocation drifted to 75%. Rebalancing reduces volatility by 8%', 'View', '#rebalance', 1),
+  ('home', 'priority-actions', 'HOME', 'Home Down Payment',
+   '$82,760 gap to target. Increase contribution $300/mo to save 8 months', 'Calculator', '#home-calculator', 2),
+  ('hsa', 'priority-actions', 'HSA', 'Claim HSA Match',
+   '$82,760 gap to target. Increase contribution $300/mo to save 8 months.', 'Claim Now', '#claim-hsa', 3);
 
 INSERT INTO equity_report
   (id, report_type, feed_type, equity_value_type, equity_value, equity_share_count, share_account_type, stock_type, last_updated)

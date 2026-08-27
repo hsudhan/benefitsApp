@@ -3,7 +3,8 @@
 // View: Dashboard page. All data arrives over the REST API via the
 // useDashboard hook; DTOs are mapped to view-models by presenters. This
 // component contains no data access and no business logic. Sections render
-// inline: Net Worth, Quick Actions, then the equity report tiles. The page
+// inline: Priority Items, Net Worth, Quick Actions, then the equity report
+// tiles. The page
 // renders inside the shared PageShell: a 70%-width center panel flanked by
 // 15%-width gray side panels.
 
@@ -12,6 +13,7 @@ import PageShell from '@/components/PageShell'
 import DraggableTileGrid from '@/components/DraggableTileGrid'
 import NetWorthTile from '@/components/tiles/NetWorthTile'
 import PortfolioTile from '@/components/tiles/PortfolioTile'
+import PriorityActionsTile from '@/components/tiles/PriorityActionsTile'
 import EquityReportTile from '@/components/tiles/EquityReportTile'
 import BalanceSheetTile from '@/components/tiles/BalanceSheetTile'
 import { useDashboard } from '@/lib/hooks/useDashboard'
@@ -50,6 +52,8 @@ export default function Dashboard() {
       <AppHeader displayName={data.user.displayName} onLogout={handleLogout} />
 
       <main className={styles.pageMain}>
+       
+
         <section aria-label="Net worth">
           <h2 className={styles.sectionTitle}>{SECTION_COPY.networth.title}</h2>
           <DraggableTileGrid
@@ -80,6 +84,10 @@ export default function Dashboard() {
             <EquityReportTile report={data.equityReport} />
             <BalanceSheetTile report={toBalanceSheetView(data.balanceSheet)} />
           </div>
+        </section>
+
+         <section aria-label="Priority items">
+          <PriorityActionsTile panel={data.priorityActions} />
         </section>
       </main>
     </PageShell>

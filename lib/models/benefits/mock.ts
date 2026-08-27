@@ -11,10 +11,42 @@ import type {
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
+  PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
 } from '@/lib/types'
 import type { BenefitsRepository } from './repository'
+
+const priorityActions: PriorityActionsDTO = {
+  id: 'priority-actions',
+  actionsTitle: 'Priority Items',
+  actions: [
+    {
+      id: 'rebalance',
+      actionCategory: 'REBALANCE',
+      actionTitle: 'Rebalance Portfolio',
+      actionDescription: 'Stock allocation drifted to 75%. Rebalancing reduces volatility by 8%',
+      actionLabel: 'View',
+      actionHref: '#rebalance',
+    },
+    {
+      id: 'home',
+      actionCategory: 'HOME',
+      actionTitle: 'Home Down Payment',
+      actionDescription: '$82,760 gap to target. Increase contribution $300/mo to save 8 months',
+      actionLabel: 'Calculator',
+      actionHref: '#home-calculator',
+    },
+    {
+      id: 'hsa',
+      actionCategory: 'HSA',
+      actionTitle: 'Claim HSA Match',
+      actionDescription: '$82,760 gap to target. Increase contribution $300/mo to save 8 months.',
+      actionLabel: 'Claim Now',
+      actionHref: '#claim-hsa',
+    },
+  ],
+}
 
 const summaryTiles: BenefitTileDTO[] = [
   {
@@ -184,6 +216,7 @@ const networthTiles: NetWorthTileDTO[] = [
     valueText: '$1.24M',
     description: '12.4 TYD',
     descriptionTone: 'green',
+    tileTone: 'gray',
   },
   {
     id: 'pltr-equity-value',
@@ -191,6 +224,7 @@ const networthTiles: NetWorthTileDTO[] = [
     valueText: '$842K',
     description: '68% Conc.',
     descriptionTone: 'plain',
+    tileTone: 'gray',
   },
   {
     id: 'total-compensation',
@@ -292,6 +326,10 @@ const compScenarios: CompScenariosDTO = {
 export class MockBenefitsRepository implements BenefitsRepository {
   async getSummaryTiles(): Promise<BenefitTileDTO[]> {
     return summaryTiles
+  }
+
+  async getPriorityActions(): Promise<PriorityActionsDTO> {
+    return priorityActions
   }
 
   async getCompTiles(): Promise<CompTileDTO[]> {

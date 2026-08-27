@@ -12,12 +12,14 @@ import type {
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
+  PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
 } from '@/lib/types'
 
 export interface BenefitsRepository {
   getSummaryTiles(): Promise<BenefitTileDTO[]>
+  getPriorityActions(): Promise<PriorityActionsDTO>
   getCompTiles(): Promise<CompTileDTO[]>
   getPortfolioTiles(): Promise<PortfolioTileDTO[]>
   getQuickLinks(): Promise<QuickLinkDTO[]>

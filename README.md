@@ -18,6 +18,7 @@ app/
     benefits/health/          #   GET  /api/benefits/health
     benefits/retirement/      #   GET  /api/benefits/retirement
     benefits/networth/        #   GET  /api/benefits/networth
+    benefits/priority-actions/ #  GET  /api/benefits/priority-actions
     benefits/equity-report/   #   GET  /api/benefits/equity-report
     benefits/balance-sheet/   #   GET  /api/benefits/balance-sheet
     benefits/comp-breakdown/  #   GET  /api/benefits/comp-breakdown
@@ -25,7 +26,7 @@ app/
   login/                      # Views (pages) — tabbed via AppHeader nav; each
                               #   page renders in a 60%-width center panel
                               #   (PageShell) flanked by gray side panels:
-  dashboard/                  #   Dashboard (net worth, quick actions, equity report)
+  dashboard/                  #   Dashboard (priority items, net worth, quick actions, equity report)
   total-comp/                 #   Total Comp (tiles, quick actions, breakdown, scenarios)
   portfolio/                  #   Portfolio & Banking (blank per spec)
   benefits/                   #   Benefits (summary, quick actions, health, retirement)
@@ -56,7 +57,7 @@ components/                   # Views — dumb renderers + co-located CSS module
   PageShell.tsx               # 60%-width center panel + gray side panels
   tiles/                      # BenefitTile / HealthTile / PortfolioTile / RetirementTile
                               # NetWorthTile / EquityReportTile / BalanceSheetTile
-                              # CompBreakdownTile / StockScenariosTile
+                              # CompBreakdownTile / StockScenariosTile / PriorityActionsTile
 ```
 
 Request flow (every layer independently replaceable):

@@ -10,6 +10,7 @@ import {
   fetchEquityReport,
   fetchNetWorthTiles,
   fetchPortfolioTiles,
+  fetchPriorityActions,
   fetchQuickLinks,
 } from '@/lib/api-client'
 import { useLogout } from '@/lib/hooks/useLogout'
@@ -19,12 +20,14 @@ import type {
   EquityReportDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
+  PriorityActionsDTO,
   QuickLinkDTO,
   UserDTO,
 } from '@/lib/types'
 
 export interface DashboardData {
   user: UserDTO
+  priorityActions: PriorityActionsDTO
   networth: NetWorthTileDTO[]
   portfolio: PortfolioTileDTO[]
   quickLinks: QuickLinkDTO[]
@@ -36,15 +39,17 @@ export type DashboardState = ResourceState<DashboardData>
 
 export function useDashboard(): { state: DashboardState; handleLogout: () => Promise<void> } {
   const state = useResources<DashboardData>(async () => {
-    const [user, networth, portfolio, quickLinks, equityReport, balanceSheet] = await Promise.all([
-      fetchCurrentUser(),
-      fetchNetWorthTiles(),
-      fetchPortfolioTiles(),
-      fetchQuickLinks(),
-      fetchEquityReport(),
-      fetchBalanceSheet(),
-    ])
-    return { user, networth, portfolio, quickLinks, equityReport, balanceSheet }
+    const [user, priorityActions, networth, portfolio, quickLinks, equityReport, balanceSheet] =
+      await Promise.all([
+        fetchCurrentUser(),
+        fetchPriorityActions(),
+        fetchNetWorthTiles(),
+        fetchPortfolioTiles(),
+        fetchQuickLinks(),
+        fetchEquityReport(),
+        fetchBalanceSheet(),
+      ])
+    return { user, priorityActions, networth, portfolio, quickLinks, equityReport, balanceSheet }
   })
   const handleLogout = useLogout()
   return { state, handleLogout }

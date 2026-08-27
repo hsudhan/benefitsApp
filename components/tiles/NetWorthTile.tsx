@@ -1,13 +1,14 @@
 // View: dashboard net-worth tile. Renders a prepared view-model — no data
 // access, no business logic. Shows either a description row (plain or green)
-// or a gray oval hyperlink button under the amount.
+// or a gray oval hyperlink button under the amount. tileTone 'gray' renders
+// the tile on #f3f5f7 instead of the default card white.
 
 import type { NetWorthTileView } from '@/lib/presenters'
 import styles from './Tiles.module.css'
 
 export default function NetWorthTile({ tile }: { tile: NetWorthTileView }) {
   return (
-    <div className={styles.tile}>
+    <div className={`${styles.tile} ${tile.tileTone === 'gray' ? styles.tileGray : ''}`}>
       <p className={styles.tileTitle}>{tile.title}</p>
       <p className={styles.tileAmount}>{tile.valueText}</p>
       {tile.actionLabel ? (

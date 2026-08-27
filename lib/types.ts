@@ -90,15 +90,38 @@ export interface QuickLinkDTO {
  *  backing table — they intentionally do not reuse BenefitTileDTO. Amounts
  *  arrive as exact display text (e.g. "$1.24M", "$4,820") because the spec
  *  mixes compact and full formats. The 'green' tone renders the description
- *  in green; an action label/href renders a gray oval hyperlink button. */
+ *  in green; an action label/href renders a gray oval hyperlink button. The
+ *  'gray' tile tone renders the tile itself on #f3f5f7 (dashboard tiles
+ *  1 & 2); undefined renders the default card white. */
 export interface NetWorthTileDTO {
   id: string
   title: string
   valueText: string
   description?: string
   descriptionTone?: 'plain' | 'green'
+  tileTone?: 'white' | 'gray'
   actionLabel?: string
   actionHref?: string
+}
+
+/** A single action tile in the dashboard priority-actions panel: gray
+ *  category title, big bold action title, description, and a gray oval
+ *  action button with blue foreground. */
+export interface PriorityActionDTO {
+  id: string
+  actionCategory: string
+  actionTitle: string
+  actionDescription: string
+  actionLabel: string
+  actionHref: string
+}
+
+/** Dashboard priority actions tile (single-row resource): big bold
+ *  actionsTitle header over a white panel of three action tiles. */
+export interface PriorityActionsDTO {
+  id: string
+  actionsTitle: string
+  actions: PriorityActionDTO[]
 }
 
 /** A single RSU grant tranche row in the equity report's grant table. */

@@ -17,6 +17,8 @@ import type {
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
+  PriorityActionDTO,
+  PriorityActionsDTO,
   QuickLinkDTO,
   RetirementContributionDTO,
   RetirementTileDTO,
@@ -84,8 +86,23 @@ interface NetWorthTileRow {
   value_text: string
   description: string | null
   description_tone: 'plain' | 'green' | null
+  tile_tone: 'white' | 'gray' | null
   action_label: string | null
   action_href: string | null
+}
+
+interface PriorityActionsRow {
+  id: string
+  actions_title: string
+}
+
+interface PriorityActionItemRow {
+  id: string
+  action_category: string
+  action_title: string
+  action_description: string
+  action_label: string
+  action_href: string
 }
 
 interface EquityReportRow {
@@ -198,6 +215,7 @@ function toNetWorthTileDTO(row: NetWorthTileRow): NetWorthTileDTO {
     valueText: row.value_text,
     description: row.description ?? undefined,
     descriptionTone: row.description_tone ?? undefined,
+    tileTone: row.tile_tone ?? undefined,
     actionLabel: row.action_label ?? undefined,
     actionHref: row.action_href ?? undefined,
   }
@@ -240,6 +258,33 @@ export class PostgresBenefitsRepository implements BenefitsRepository {
         ORDER BY position`
     )
     return rows.map(toBenefitTileDTO)
+  }
+
+  async getPriorityActions(): Promise<PriorityActionsDTO> {
+    const { rows } = await this.pool.query<PriorityActionsRow>(
+      `SELECT id, actions_title
+         FROM priority_actions
+        ORDER BY id
+        LIMIT 1`
+    )
+    const row = rows[0]
+    const { rows: actionRows } = await this.pool.query<PriorityActionItemRow>(
+      `SELECT id, action_category, action_title, action_description,
+              action_label, action_href
+         FROM priority_action_items
+        WHERE priority_actions_id = $1
+        ORDER BY position`,
+      [row.id]
+    )
+    const actions: PriorityActionDTO[] = actionRows.map((action) => ({
+      id: action.id,
+      actionCategory: action.action_category,
+      actionTitle: action.action_title,
+      actionDescription: action.action_description,
+      actionLabel: action.action_label,
+      actionHref: action.action_href,
+    }))
+    return { id: row.id, actionsTitle: row.actions_title, actions }
   }
 
   async getRetirementTiles(): Promise<RetirementTileDTO[]> {
@@ -304,7 +349,7 @@ export class PostgresBenefitsRepository implements BenefitsRepository {
   async getNetWorthTiles(): Promise<NetWorthTileDTO[]> {
     const { rows } = await this.pool.query<NetWorthTileRow>(
       `SELECT id, title, value_text, description, description_tone,
-              action_label, action_href
+              tile_tone, action_label, action_href
          FROM networth_tiles
         ORDER BY position`
     )

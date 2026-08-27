@@ -13,6 +13,7 @@ import type {
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
+  PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
   UserDTO,
@@ -75,6 +76,10 @@ export function fetchPortfolioTiles(): Promise<PortfolioTileDTO[]> {
 
 export function fetchQuickLinks(): Promise<QuickLinkDTO[]> {
   return request('/api/benefits/quick-links')
+}
+
+export function fetchPriorityActions(): Promise<PriorityActionsDTO> {
+  return request('/api/benefits/priority-actions')
 }
 
 export function fetchHealthTiles(): Promise<HealthTileDTO[]> {
