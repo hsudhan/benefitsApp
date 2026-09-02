@@ -14,6 +14,8 @@ import type {
   CompTileVariant,
   EquityGrantDTO,
   EquityReportDTO,
+  FinancialGoalDTO,
+  FinancialGoalsDTO,
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
@@ -25,6 +27,9 @@ import type {
   RetirementTileVariant,
   StockScenarioDTO,
   TileVariant,
+  TopQuestionDTO,
+  TopQuestionsDTO,
+  VestingEventDTO,
 } from '@/lib/types'
 import type { BenefitsRepository } from './repository'
 
@@ -61,12 +66,26 @@ interface RetirementTileRow {
   info_category: string | null
   info_type: string | null
   info_description: string | null
+  unvested_total_type: string | null
+  unvested_shares_text: string | null
+  unvested_shares_type: string | null
+  unvested_value_type: string | null
+  unvested_value_text: string | null
+  unvested_price_type: string | null
 }
 
 interface RetirementContributionRow {
   tile_id: string
   contribution_percent: number
   contribution_amount: string
+}
+
+interface VestingEventRow {
+  tile_id: string
+  id: string
+  vesting_date: string
+  shares_text: string
+  value_text: string
 }
 
 interface CompTileRow {
@@ -101,6 +120,19 @@ interface PriorityActionItemRow {
   action_category: string
   action_title: string
   action_description: string
+  action_label: string
+  action_href: string
+}
+
+interface TopQuestionsRow {
+  id: string
+  questions_message: string
+  subtext_type: string
+}
+
+interface TopQuestionItemRow {
+  id: string
+  question_text: string
   action_label: string
   action_href: string
 }
@@ -142,6 +174,20 @@ interface BalanceSheetHoldingRow {
   value_tone: 'black' | 'maroon' | null
 }
 
+interface FinancialGoalsRow {
+  id: string
+  financial_goals_tile_title: string
+  action_label: string
+  action_href: string
+}
+
+interface FinancialGoalItemRow {
+  id: string
+  shares_type: string
+  share_description: string
+  goal_date: string
+}
+
 interface CompBreakdownRowRecord {
   id: string
   comp_type: string
@@ -172,7 +218,8 @@ function toBenefitTileDTO(row: BenefitTileRow): BenefitTileDTO {
 
 function toRetirementTileDTO(
   row: RetirementTileRow,
-  contributions?: RetirementContributionDTO[]
+  contributions?: RetirementContributionDTO[],
+  vestingEvents?: VestingEventDTO[]
 ): RetirementTileDTO {
   return {
     id: row.id,
@@ -192,6 +239,13 @@ function toRetirementTileDTO(
     infoCategory: row.info_category ?? undefined,
     infoType: row.info_type ?? undefined,
     infoDescription: row.info_description ?? undefined,
+    unvestedTotalType: row.unvested_total_type ?? undefined,
+    unvestedSharesText: row.unvested_shares_text ?? undefined,
+    unvestedSharesType: row.unvested_shares_type ?? undefined,
+    unvestedValueType: row.unvested_value_type ?? undefined,
+    unvestedValueText: row.unvested_value_text ?? undefined,
+    unvestedPriceType: row.unvested_price_type ?? undefined,
+    vestingEvents,
   }
 }
 
@@ -287,12 +341,43 @@ export class PostgresBenefitsRepository implements BenefitsRepository {
     return { id: row.id, actionsTitle: row.actions_title, actions }
   }
 
+  async getTopQuestions(): Promise<TopQuestionsDTO> {
+    const { rows } = await this.pool.query<TopQuestionsRow>(
+      `SELECT id, questions_message, subtext_type
+         FROM top_questions
+        ORDER BY id
+        LIMIT 1`
+    )
+    const row = rows[0]
+    const { rows: questionRows } = await this.pool.query<TopQuestionItemRow>(
+      `SELECT id, question_text, action_label, action_href
+         FROM top_question_items
+        WHERE top_questions_id = $1
+        ORDER BY position`,
+      [row.id]
+    )
+    const questions: TopQuestionDTO[] = questionRows.map((question) => ({
+      id: question.id,
+      questionText: question.question_text,
+      actionLabel: question.action_label,
+      actionHref: question.action_href,
+    }))
+    return {
+      id: row.id,
+      questionsMessage: row.questions_message,
+      subtextType: row.subtext_type,
+      questions,
+    }
+  }
+
   async getRetirementTiles(): Promise<RetirementTileDTO[]> {
     const { rows } = await this.pool.query<RetirementTileRow>(
       `SELECT id, title, variant, amount, description,
               trend_direction, trend_percent, expiry_date, date,
               contributed_amount, irs_limit, percent_spent,
-              info_category, info_type, info_description
+              info_category, info_type, info_description,
+              unvested_total_type, unvested_shares_text, unvested_shares_type,
+              unvested_value_type, unvested_value_text, unvested_price_type
          FROM retirement_tiles
         ORDER BY position`
     )
@@ -310,7 +395,25 @@ export class PostgresBenefitsRepository implements BenefitsRepository {
       })
       contributionsByTile.set(row.tile_id, contributions)
     }
-    return rows.map((row) => toRetirementTileDTO(row, contributionsByTile.get(row.id)))
+    const { rows: vestingRows } = await this.pool.query<VestingEventRow>(
+      `SELECT tile_id, id, vesting_date, shares_text, value_text
+         FROM retirement_vesting_events
+        ORDER BY position`
+    )
+    const vestingEventsByTile = new Map<string, VestingEventDTO[]>()
+    for (const row of vestingRows) {
+      const events = vestingEventsByTile.get(row.tile_id) ?? []
+      events.push({
+        id: row.id,
+        vestingDate: row.vesting_date,
+        sharesText: row.shares_text,
+        valueText: row.value_text,
+      })
+      vestingEventsByTile.set(row.tile_id, events)
+    }
+    return rows.map((row) =>
+      toRetirementTileDTO(row, contributionsByTile.get(row.id), vestingEventsByTile.get(row.id))
+    )
   }
 
   async getCompTiles(): Promise<CompTileDTO[]> {
@@ -453,6 +556,36 @@ export class PostgresBenefitsRepository implements BenefitsRepository {
     return {
       scenarios: rows.map(toStockScenarioDTO),
       disclosureText: disclosureRows[0]?.disclosure_text ?? '',
+    }
+  }
+
+  async getFinancialGoals(): Promise<FinancialGoalsDTO> {
+    const { rows } = await this.pool.query<FinancialGoalsRow>(
+      `SELECT id, financial_goals_tile_title, action_label, action_href
+         FROM financial_goals
+        ORDER BY id
+        LIMIT 1`
+    )
+    const row = rows[0]
+    const { rows: goalRows } = await this.pool.query<FinancialGoalItemRow>(
+      `SELECT id, shares_type, share_description, goal_date
+         FROM financial_goal_items
+        WHERE financial_goals_id = $1
+        ORDER BY position`,
+      [row.id]
+    )
+    const goals: FinancialGoalDTO[] = goalRows.map((goal) => ({
+      id: goal.id,
+      sharesType: goal.shares_type,
+      shareDescription: goal.share_description,
+      goalDate: goal.goal_date,
+    }))
+    return {
+      id: row.id,
+      financialGoalsTileTitle: row.financial_goals_tile_title,
+      actionLabel: row.action_label,
+      actionHref: row.action_href,
+      goals,
     }
   }
 }

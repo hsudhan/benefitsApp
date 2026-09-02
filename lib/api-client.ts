@@ -10,12 +10,14 @@ import type {
   CompScenariosDTO,
   CompTileDTO,
   EquityReportDTO,
+  FinancialGoalsDTO,
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
   PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
+  TopQuestionsDTO,
   UserDTO,
 } from '@/lib/types'
 
@@ -82,6 +84,10 @@ export function fetchPriorityActions(): Promise<PriorityActionsDTO> {
   return request('/api/benefits/priority-actions')
 }
 
+export function fetchTopQuestions(): Promise<TopQuestionsDTO> {
+  return request('/api/benefits/top-questions')
+}
+
 export function fetchHealthTiles(): Promise<HealthTileDTO[]> {
   return request('/api/benefits/health')
 }
@@ -108,4 +114,8 @@ export function fetchCompBreakdown(): Promise<CompBreakdownDTO> {
 
 export function fetchCompScenarios(): Promise<CompScenariosDTO> {
   return request('/api/benefits/stock-scenarios')
+}
+
+export function fetchFinancialGoals(): Promise<FinancialGoalsDTO> {
+  return request('/api/benefits/financial-goals')
 }

@@ -1,14 +1,15 @@
 'use client'
 
 // Controller-side hook for the Total Comp page: composes the user,
-// compensation, portfolio, quick-link, compensation-breakdown, and
-// stock-scenario REST resources into one view contract.
+// compensation, portfolio, quick-link, compensation-breakdown,
+// stock-scenario, and financial-goals REST resources into one view contract.
 
 import {
   fetchCompBreakdown,
   fetchCompScenarios,
   fetchCompTiles,
   fetchCurrentUser,
+  fetchFinancialGoals,
   fetchPortfolioTiles,
   fetchQuickLinks,
 } from '@/lib/api-client'
@@ -18,6 +19,7 @@ import type {
   CompBreakdownDTO,
   CompScenariosDTO,
   CompTileDTO,
+  FinancialGoalsDTO,
   PortfolioTileDTO,
   QuickLinkDTO,
   UserDTO,
@@ -30,21 +32,24 @@ export interface TotalCompData {
   quickLinks: QuickLinkDTO[]
   breakdown: CompBreakdownDTO
   scenarios: CompScenariosDTO
+  financialGoals: FinancialGoalsDTO
 }
 
 export type TotalCompState = ResourceState<TotalCompData>
 
 export function useTotalComp(): { state: TotalCompState; handleLogout: () => Promise<void> } {
   const state = useResources<TotalCompData>(async () => {
-    const [user, comp, portfolio, quickLinks, breakdown, scenarios] = await Promise.all([
-      fetchCurrentUser(),
-      fetchCompTiles(),
-      fetchPortfolioTiles(),
-      fetchQuickLinks(),
-      fetchCompBreakdown(),
-      fetchCompScenarios(),
-    ])
-    return { user, comp, portfolio, quickLinks, breakdown, scenarios }
+    const [user, comp, portfolio, quickLinks, breakdown, scenarios, financialGoals] =
+      await Promise.all([
+        fetchCurrentUser(),
+        fetchCompTiles(),
+        fetchPortfolioTiles(),
+        fetchQuickLinks(),
+        fetchCompBreakdown(),
+        fetchCompScenarios(),
+        fetchFinancialGoals(),
+      ])
+    return { user, comp, portfolio, quickLinks, breakdown, scenarios, financialGoals }
   })
   const handleLogout = useLogout()
   return { state, handleLogout }

@@ -9,12 +9,14 @@ import type {
   CompScenariosDTO,
   CompTileDTO,
   EquityReportDTO,
+  FinancialGoalsDTO,
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
   PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
+  TopQuestionsDTO,
 } from '@/lib/types'
 import { getBenefitsRepository } from './index'
 
@@ -24,6 +26,10 @@ export async function getSummaryTiles(): Promise<BenefitTileDTO[]> {
 
 export async function getPriorityActions(): Promise<PriorityActionsDTO> {
   return getBenefitsRepository().getPriorityActions()
+}
+
+export async function getTopQuestions(): Promise<TopQuestionsDTO> {
+  return getBenefitsRepository().getTopQuestions()
 }
 
 export async function getCompTiles(): Promise<CompTileDTO[]> {
@@ -64,4 +70,8 @@ export async function getCompBreakdown(): Promise<CompBreakdownDTO> {
 
 export async function getCompScenarios(): Promise<CompScenariosDTO> {
   return getBenefitsRepository().getCompScenarios()
+}
+
+export async function getFinancialGoals(): Promise<FinancialGoalsDTO> {
+  return getBenefitsRepository().getFinancialGoals()
 }

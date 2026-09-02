@@ -4,7 +4,7 @@
 
 BEGIN;
 
-TRUNCATE benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, priority_actions, priority_action_items, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
+TRUNCATE benefit_tiles, retirement_tiles, retirement_contributions, retirement_vesting_events, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, priority_actions, priority_action_items, top_questions, top_question_items, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure, financial_goals, financial_goal_items;
 
 INSERT INTO benefit_tiles
   (id, title, variant, amount, description, trend_direction, trend_percent, expiry_date, date, position)
@@ -16,19 +16,31 @@ VALUES
 
 INSERT INTO retirement_tiles
   (id, title, variant, amount, description, trend_direction, trend_percent, expiry_date, date,
-   contributed_amount, irs_limit, percent_spent, info_category, info_type, info_description, position)
+   contributed_amount, irs_limit, percent_spent, info_category, info_type, info_description,
+   unvested_total_type, unvested_shares_text, unvested_shares_type,
+   unvested_value_type, unvested_value_text, unvested_price_type, position)
 VALUES
   ('401k-fidelity', '401K - Fidelity Net Benefits', 'detail', NULL, NULL, NULL, NULL, NULL, NULL,
    14800.00, 23000.00, 64, 'Tip', 'Opportunity',
-   'You can contribute $82,200 more this year to reach the IRS maximum and maximize tax-advantage growth.', 1),
-  ('pltr-rsu', 'PLTR RSU Program - Morgan Stanley', 'description', 42300.00, 'Annual Employer Contribution', NULL, NULL, NULL, NULL,
-   NULL, NULL, NULL, NULL, NULL, NULL, 2);
+   'You can contribute $82,200 more this year to reach the IRS maximum and maximize tax-advantage growth.',
+   NULL, NULL, NULL, NULL, NULL, NULL, 1),
+  ('pltr-rsu', 'PLTR RSU Program - Morgan Stanley', 'unvested', NULL, NULL, NULL, NULL, NULL, NULL,
+   NULL, NULL, NULL, NULL, NULL, NULL,
+   'TOTAL UNVESTED', '4,620', 'shares remaining',
+   'UNVESTED VALUE', '$559K', '@ $121.08/share', 2);
 
 INSERT INTO retirement_contributions
   (tile_id, position, contribution_percent, contribution_amount)
 VALUES
   ('401k-fidelity', 1, 8, 14800.00),
   ('401k-fidelity', 2, 6, 11100.00);
+
+INSERT INTO retirement_vesting_events
+  (tile_id, id, vesting_date, shares_text, value_text, position)
+VALUES
+  ('pltr-rsu', 'vest-1', 'Jun 15, 2024', '850 shares', '-$102,900', 1),
+  ('pltr-rsu', 'vest-2', 'Jun 15, 2024', '850 shares', '-$102,900', 2),
+  ('pltr-rsu', 'vest-3', 'Jun 15, 2024', '850 shares', '-$102,900', 3);
 
 INSERT INTO comp_tiles
   (id, title, variant, amount, description, trend_direction, trend_percent, date, position)
@@ -91,6 +103,18 @@ VALUES
   ('hsa', 'priority-actions', 'HSA', 'Claim HSA Match',
    '$82,760 gap to target. Increase contribution $300/mo to save 8 months.', 'Claim Now', '#claim-hsa', 3);
 
+INSERT INTO top_questions (id, questions_message, subtext_type) VALUES
+  ('top-questions', 'Top questions from your Peers', 'Palantir Cohort - Anonymized');
+
+INSERT INTO top_question_items
+  (id, top_questions_id, question_text, action_label, action_href, position)
+VALUES
+  ('q1', 'top-questions', 'What should I do with my PLTR RSUs when they vest?', 'Ask AI', '#ask-ai', 1),
+  ('q2', 'top-questions', 'What should I do with my PLTR RSUs when they vest?', 'Ask AI', '#ask-ai', 2),
+  ('q3', 'top-questions', 'What should I do with my PLTR RSUs when they vest?', 'Ask AI', '#ask-ai', 3),
+  ('q4', 'top-questions', 'What should I do with my PLTR RSUs when they vest?', 'Ask AI', '#ask-ai', 4),
+  ('q5', 'top-questions', 'What should I do with my PLTR RSUs when they vest?', 'Ask AI', '#ask-ai', 5);
+
 INSERT INTO equity_report
   (id, report_type, feed_type, equity_value_type, equity_value, equity_share_count, share_account_type, stock_type, last_updated)
 VALUES
@@ -127,5 +151,22 @@ INSERT INTO stock_scenarios (id, stock_type, stock_value, total_value, position)
 
 INSERT INTO comp_disclosure (id, disclosure_text) VALUES
   ('note', 'Scenarios based on 6960 vested PLTR shared. Unvested shared (4620) not included. Educational only - not investment advice.');
+
+INSERT INTO financial_goals (id, financial_goals_tile_title, action_label, action_href) VALUES
+  ('financial-goals', 'Financial Goals Timeline', 'Add Milestone', '#add-milestone');
+
+INSERT INTO financial_goal_items
+  (id, financial_goals_id, shares_type, share_description, goal_date, position)
+VALUES
+  ('goal-1', 'financial-goals', 'PLTR RSU Vesting - 850 shares',
+   'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%', 'JUN 2024', 1),
+  ('goal-2', 'financial-goals', 'HSA Contribution deadline',
+   'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%', 'JUN 2024', 2),
+  ('goal-3', 'financial-goals', 'Home Down Payment Goal',
+   'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%', 'JUN 2024', 3),
+  ('goal-4', 'financial-goals', 'Next PLTR Vesting - 850 shares',
+   'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%', 'JUN 2024', 4),
+  ('goal-5', 'financial-goals', 'Early Retirement Target',
+   'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%', 'JUN 2024', 5);
 
 COMMIT;

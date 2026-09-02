@@ -3,9 +3,9 @@
 // View: Total Comp page. All data arrives over the REST API via the
 // useTotalComp hook; DTOs are mapped to view-models by presenters. This
 // component contains no data access and no business logic. Sections render
-// inline: Total Compensation, Quick Actions, Compensation Breakdown. The
-// page renders inside the shared PageShell: a 70%-width center panel
-// flanked by 15%-width gray side panels.
+// inline: Total Compensation, Quick Actions, Compensation Breakdown,
+// Financial Goals. The page renders inside the shared PageShell: a
+// 70%-width center panel flanked by 15%-width gray side panels.
 
 import AppHeader from '@/components/AppHeader'
 import PageShell from '@/components/PageShell'
@@ -13,6 +13,7 @@ import DraggableTileGrid from '@/components/DraggableTileGrid'
 import BenefitTile from '@/components/tiles/BenefitTile'
 import PortfolioTile from '@/components/tiles/PortfolioTile'
 import CompBreakdownTile from '@/components/tiles/CompBreakdownTile'
+import FinancialGoalsTile from '@/components/tiles/FinancialGoalsTile'
 import StockScenariosTile from '@/components/tiles/StockScenariosTile'
 import { useTotalComp } from '@/lib/hooks/useTotalComp'
 import {
@@ -87,6 +88,10 @@ export default function TotalComp() {
             <CompBreakdownTile breakdown={toCompBreakdownView(data.breakdown)} />
             <StockScenariosTile data={toCompScenariosView(data.scenarios)} />
           </div>
+        </section>
+
+        <section aria-label="Financial goals">
+          <FinancialGoalsTile panel={data.financialGoals} />
         </section>
       </main>
     </PageShell>

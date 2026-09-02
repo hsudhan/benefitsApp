@@ -12,6 +12,7 @@ import type {
   NetWorthTileDTO,
   PortfolioTileDTO,
   RetirementTileDTO,
+  VestingEventDTO,
 } from '@/lib/types'
 import { formatCurrency, formatCurrencyK, formatCurrencyWhole, formatStockPrice } from '@/lib/format'
 
@@ -129,11 +130,43 @@ export interface RetirementDetailView {
   infoDescription: string
 }
 
+/** 'unvested' variant (PLTR RSU card): two side-by-side unvested summary
+ *  panels between gray dividers, then the borderless vesting-events table.
+ *  Text passes straight through — it arrives display-ready. */
+export interface RetirementUnvestedView {
+  layout: 'unvested'
+  id: string
+  title: string
+  unvestedTotalType: string
+  unvestedSharesText: string
+  unvestedSharesType: string
+  unvestedValueType: string
+  unvestedValueText: string
+  unvestedPriceType: string
+  vestingEvents: VestingEventDTO[]
+}
+
 export type RetirementTileView =
   | { layout: 'standard'; standard: BenefitTileView }
   | RetirementDetailView
+  | RetirementUnvestedView
 
 export function toRetirementTileView(tile: RetirementTileDTO): RetirementTileView {
+  if (tile.variant === 'unvested') {
+    return {
+      layout: 'unvested',
+      id: tile.id,
+      title: tile.title,
+      unvestedTotalType: tile.unvestedTotalType ?? '',
+      unvestedSharesText: tile.unvestedSharesText ?? '',
+      unvestedSharesType: tile.unvestedSharesType ?? '',
+      unvestedValueType: tile.unvestedValueType ?? '',
+      unvestedValueText: tile.unvestedValueText ?? '',
+      unvestedPriceType: tile.unvestedPriceType ?? '',
+      vestingEvents: tile.vestingEvents ?? [],
+    }
+  }
+
   if (tile.variant !== 'detail') {
     return { layout: 'standard', standard: toBenefitTileView({ ...tile, variant: tile.variant }) }
   }

@@ -14,6 +14,7 @@ import DraggableTileGrid from '@/components/DraggableTileGrid'
 import NetWorthTile from '@/components/tiles/NetWorthTile'
 import PortfolioTile from '@/components/tiles/PortfolioTile'
 import PriorityActionsTile from '@/components/tiles/PriorityActionsTile'
+import TopQuestionsTile from '@/components/tiles/TopQuestionsTile'
 import EquityReportTile from '@/components/tiles/EquityReportTile'
 import BalanceSheetTile from '@/components/tiles/BalanceSheetTile'
 import { useDashboard } from '@/lib/hooks/useDashboard'
@@ -88,6 +89,10 @@ export default function Dashboard() {
 
          <section aria-label="Priority items">
           <PriorityActionsTile panel={data.priorityActions} />
+        </section>
+
+        <section aria-label="Top questions">
+          <TopQuestionsTile panel={data.topQuestions} />
         </section>
       </main>
     </PageShell>

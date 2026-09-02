@@ -5,6 +5,7 @@
 .cell {
   display: flex;
   cursor: grab;
+  background: #fff;
 }
 
 .cell > * {

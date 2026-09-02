@@ -4,7 +4,7 @@
 
 BEGIN;
 
-DROP TABLE IF EXISTS benefit_tiles, retirement_tiles, retirement_contributions, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, priority_actions, priority_action_items, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure;
+DROP TABLE IF EXISTS benefit_tiles, retirement_tiles, retirement_contributions, retirement_vesting_events, comp_tiles, portfolio_tiles, health_tiles, quick_links, networth_tiles, priority_actions, priority_action_items, top_questions, top_question_items, equity_report, equity_grants, balance_sheet, balance_sheet_holdings, comp_breakdown, comp_breakdown_total, stock_scenarios, comp_disclosure, financial_goals, financial_goal_items;
 
 -- BenefitTileDTO (summary resource)
 CREATE TABLE benefit_tiles (
@@ -23,24 +23,32 @@ CREATE TABLE benefit_tiles (
 -- RetirementTileDTO (retirement resource) — its own table, deliberately
 -- separate from benefit_tiles. The 'detail' variant carries the 401K
 -- contribution card: detail columns on the row, contributions in the child
--- table below.
+-- table below. The 'unvested' variant carries the PLTR RSU card: unvested
+-- summary columns on the row, vesting events in the child table below.
+-- Unvested values are exact display text because the spec mixes formats.
 CREATE TABLE retirement_tiles (
-  id                 TEXT           NOT NULL PRIMARY KEY,
-  title              TEXT           NOT NULL,
-  variant            TEXT           NOT NULL CHECK (variant IN ('description', 'trend', 'expiry', 'date', 'detail')),
-  amount             NUMERIC(12, 2),
-  description        TEXT,
-  trend_direction    TEXT           CHECK (trend_direction IN ('up', 'down')),
-  trend_percent      SMALLINT       CHECK (trend_percent >= 0),
-  expiry_date        TEXT,
-  date               TEXT,
-  contributed_amount NUMERIC(12, 2),
-  irs_limit          NUMERIC(12, 2),
-  percent_spent      SMALLINT       CHECK (percent_spent BETWEEN 0 AND 100),
-  info_category      TEXT,
-  info_type          TEXT,
-  info_description   TEXT,
-  position           SMALLINT       NOT NULL UNIQUE
+  id                   TEXT           NOT NULL PRIMARY KEY,
+  title                TEXT           NOT NULL,
+  variant              TEXT           NOT NULL CHECK (variant IN ('description', 'trend', 'expiry', 'date', 'detail', 'unvested')),
+  amount               NUMERIC(12, 2),
+  description          TEXT,
+  trend_direction      TEXT           CHECK (trend_direction IN ('up', 'down')),
+  trend_percent        SMALLINT       CHECK (trend_percent >= 0),
+  expiry_date          TEXT,
+  date                 TEXT,
+  contributed_amount   NUMERIC(12, 2),
+  irs_limit            NUMERIC(12, 2),
+  percent_spent        SMALLINT       CHECK (percent_spent BETWEEN 0 AND 100),
+  info_category        TEXT,
+  info_type            TEXT,
+  info_description     TEXT,
+  unvested_total_type  TEXT,
+  unvested_shares_text TEXT,
+  unvested_shares_type TEXT,
+  unvested_value_type  TEXT,
+  unvested_value_text  TEXT,
+  unvested_price_type  TEXT,
+  position             SMALLINT       NOT NULL UNIQUE
 );
 
 -- RetirementContributionDTO: ordered contribution rows belonging to a
@@ -51,6 +59,18 @@ CREATE TABLE retirement_contributions (
   contribution_percent SMALLINT       NOT NULL,
   contribution_amount  NUMERIC(12, 2) NOT NULL,
   PRIMARY KEY (tile_id, position)
+);
+
+-- VestingEventDTO: ordered vesting-event rows belonging to an 'unvested'
+-- retirement tile (rendered in the borderless table below the unvested
+-- summary panels).
+CREATE TABLE retirement_vesting_events (
+  tile_id      TEXT     NOT NULL REFERENCES retirement_tiles (id) ON DELETE CASCADE,
+  id           TEXT     NOT NULL PRIMARY KEY,
+  vesting_date TEXT     NOT NULL,
+  shares_text  TEXT     NOT NULL,
+  value_text   TEXT     NOT NULL,
+  position     SMALLINT NOT NULL
 );
 
 -- CompTileDTO (compensation resource) — its own table, deliberately separate
@@ -128,6 +148,28 @@ CREATE TABLE priority_action_items (
   action_label        TEXT     NOT NULL,
   action_href         TEXT     NOT NULL,
   position            SMALLINT NOT NULL
+);
+
+-- TopQuestionsDTO (dashboard top questions resource): single-row table for
+-- the panel header (big bold questions_message) and the muted subtext_type
+-- row beneath it.
+CREATE TABLE top_questions (
+  id                TEXT NOT NULL PRIMARY KEY,
+  questions_message TEXT NOT NULL,
+  subtext_type      TEXT NOT NULL
+);
+
+-- TopQuestionDTO: ordered question rows belonging to a top_questions panel
+-- (rendered in the white tile with horizontal lines between rows).
+-- action_label/action_href carry the gray oval "Ask AI" button with blue
+-- foreground.
+CREATE TABLE top_question_items (
+  id               TEXT     NOT NULL PRIMARY KEY,
+  top_questions_id TEXT     NOT NULL REFERENCES top_questions (id) ON DELETE CASCADE,
+  question_text    TEXT     NOT NULL,
+  action_label     TEXT     NOT NULL,
+  action_href      TEXT     NOT NULL,
+  position         SMALLINT NOT NULL
 );
 
 -- EquityReportDTO (dashboard equity report resource): single-row table for
@@ -210,6 +252,29 @@ CREATE TABLE stock_scenarios (
 CREATE TABLE comp_disclosure (
   id              TEXT NOT NULL PRIMARY KEY,
   disclosure_text TEXT NOT NULL
+);
+
+-- FinancialGoalsDTO (Total Comp financial goals resource): single-row table
+-- for the gray tile header (financial_goals_tile_title) and its white oval
+-- "Add Milestone" button (action_label/action_href).
+CREATE TABLE financial_goals (
+  id                        TEXT NOT NULL PRIMARY KEY,
+  financial_goals_tile_title TEXT NOT NULL,
+  action_label              TEXT NOT NULL,
+  action_href               TEXT NOT NULL
+);
+
+-- FinancialGoalDTO: ordered goal rows belonging to a financial_goals panel
+-- (rendered in the white table below the gray tile). Each row is three
+-- stacked lines: black bold shares_type, gray share_description, gray
+-- goal_date.
+CREATE TABLE financial_goal_items (
+  id                 TEXT     NOT NULL PRIMARY KEY,
+  financial_goals_id TEXT     NOT NULL REFERENCES financial_goals (id) ON DELETE CASCADE,
+  shares_type        TEXT     NOT NULL,
+  share_description  TEXT     NOT NULL,
+  goal_date          TEXT     NOT NULL,
+  position           SMALLINT NOT NULL
 );
 
 COMMIT;

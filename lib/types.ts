@@ -19,12 +19,25 @@ export interface BenefitTileDTO {
 /** Retirement & equity tiles are their own resource with their own DTO and
  *  backing table — they intentionally do not reuse BenefitTileDTO. The
  *  'detail' variant renders the full contribution card (contribution tiles,
- *  IRS-limit thermometer, and info tip) from the detail fields below. */
-export type RetirementTileVariant = TileVariant | 'detail'
+ *  IRS-limit thermometer, and info tip) from the detail fields below. The
+ *  'unvested' variant renders the PLTR RSU card: two side-by-side unvested
+ *  summary panels between gray dividers, then the borderless vesting-events
+ *  table. */
+export type RetirementTileVariant = TileVariant | 'detail' | 'unvested'
 
 export interface RetirementContributionDTO {
   contributionPercent: number
   contributionAmount: number
+}
+
+/** A single row in the 'unvested' variant's vesting-events table: gray date,
+ *  black bold shares, dark green bold value. Values arrive as exact display
+ *  text because the spec mixes formats. */
+export interface VestingEventDTO {
+  id: string
+  vestingDate: string
+  sharesText: string
+  valueText: string
 }
 
 export interface RetirementTileDTO {
@@ -45,6 +58,15 @@ export interface RetirementTileDTO {
   infoCategory?: string
   infoType?: string
   infoDescription?: string
+  /** Unvested-card fields (variant 'unvested'). Values are exact display
+   *  text (e.g. "4,620", "$559K") because the spec mixes formats. */
+  unvestedTotalType?: string
+  unvestedSharesText?: string
+  unvestedSharesType?: string
+  unvestedValueType?: string
+  unvestedValueText?: string
+  unvestedPriceType?: string
+  vestingEvents?: VestingEventDTO[]
 }
 
 /** Compensation tiles (Total Comp page) are their own resource with their
@@ -124,6 +146,25 @@ export interface PriorityActionsDTO {
   actions: PriorityActionDTO[]
 }
 
+/** A single question row in the dashboard top-questions panel: question text
+ *  in black bold plus a gray oval "Ask AI" button with blue foreground. */
+export interface TopQuestionDTO {
+  id: string
+  questionText: string
+  actionLabel: string
+  actionHref: string
+}
+
+/** Dashboard top questions tile (single-row resource): big bold
+ *  questionsMessage header, a muted subtextType row, then a white tile with
+ *  the peer-question rows separated by horizontal lines. */
+export interface TopQuestionsDTO {
+  id: string
+  questionsMessage: string
+  subtextType: string
+  questions: TopQuestionDTO[]
+}
+
 /** A single RSU grant tranche row in the equity report's grant table. */
 export interface EquityGrantDTO {
   id: string
@@ -187,6 +228,27 @@ export interface CompBreakdownRowDTO {
 export interface CompBreakdownDTO {
   rows: CompBreakdownRowDTO[]
   totalComp: number
+}
+
+/** A single goal row in the Total Comp financial-goals table: black bold
+ *  sharesType line, gray regular shareDescription line, gray regular
+ *  goalDate line. Values arrive as exact display text. */
+export interface FinancialGoalDTO {
+  id: string
+  sharesType: string
+  shareDescription: string
+  goalDate: string
+}
+
+/** Financial goals tile (Total Comp page, single-row resource): gray tile
+ *  carrying the financialGoalsTileTitle header and a white oval "Add
+ *  Milestone" button (blue foreground), with the white goal table below. */
+export interface FinancialGoalsDTO {
+  id: string
+  financialGoalsTileTitle: string
+  actionLabel: string
+  actionHref: string
+  goals: FinancialGoalDTO[]
 }
 
 /** PLTR stock scenarios (Total Comp page): bear/current/bull mini tiles plus

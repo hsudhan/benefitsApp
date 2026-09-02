@@ -4,7 +4,7 @@
 
 .tile {
   position: relative;
-  background: var(--card);
+  background: #fff;
   color: #000;
   border: 1px solid var(--border);
   border-radius: 0;
@@ -58,7 +58,7 @@
    tiles 1 & 2); undefined renders the default card white. */
 
 .tileGray {
-  background: #f3f5f7;
+  background: #fff;
 }
 
 .descGreen {
@@ -143,6 +143,96 @@
   text-decoration: none;
 }
 
+/* Top questions tile (Dashboard): white tile of peer-question rows separated
+   by horizontal lines. Each row: question-bubble icon, black bold question
+   text, gray oval "Ask AI" button with blue text (reuses .actionBtn). */
+
+.questionRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.questionRow + .questionRow {
+  border-top: 1px solid var(--border);
+}
+
+.questionIcon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+}
+
+.questionText {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+/* Financial goals tile (Total Comp): gray header tile — big bold title left,
+   white oval "Add Milestone" button (blue text) right — with the white goal
+   table below. Each goal row is three stacked lines: black bold sharesType,
+   gray regular shareDescription, gray regular goalDate. */
+
+.goalsTile {
+  background: #f3f5f7;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  padding: 10px 12px;
+  box-shadow: 0 1px 3px rgba(10, 37, 64, 0.06);
+}
+
+.goalsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.milestoneBtn {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 5px 14px;
+  background: #fff;
+  border: 1px solid #d3d7dc;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.milestoneBtn:hover {
+  background: #f3f4f6;
+  text-decoration: none;
+}
+
+.goalRow {
+  padding: 6px 0;
+}
+
+.goalTitle {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+.goalDescription {
+  margin: 0 0 2px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.goalDate {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 /* Equity report tile (Dashboard) */
 
 .reportTitle {
@@ -150,6 +240,7 @@
   font-size: 21px;
   font-weight: 700;
   color: #000;
+  border: none;
 }
 
 .reportFeed {
@@ -284,7 +375,7 @@
 
 .gaugeFill {
   fill: none;
-  stroke: #008080;
+  stroke: #2563eb;
   stroke-width: 4;
 }
 
@@ -385,7 +476,7 @@
 }
 
 .fillTeal {
-  background: #008080;
+  background: #2563eb;
 }
 
 .totalRow {
@@ -594,6 +685,30 @@
   margin: 0 0 8px;
 }
 
+/* Unvested RSU variant (Benefits page): two side-by-side unvested summary
+   panels between gray dividers, then the borderless vesting-events table
+   (reuses .grantTable chrome: no borders, 2px row padding). The value column
+   is dark green bold per spec. */
+
+.unvestedGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.vestingDate {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.vestingValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: #006400;
+  text-align: right;
+}
+
 .contributionGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -633,7 +748,8 @@
 @media (max-width: 620px) {
   .contributionGrid,
   .miniGrid,
-  .actionsPanel {
+  .actionsPanel,
+  .unvestedGrid {
     grid-template-columns: 1fr;
   }
 }

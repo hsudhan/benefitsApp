@@ -8,12 +8,14 @@ import type {
   CompScenariosDTO,
   CompTileDTO,
   EquityReportDTO,
+  FinancialGoalsDTO,
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
   PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
+  TopQuestionsDTO,
 } from '@/lib/types'
 import type { BenefitsRepository } from './repository'
 
@@ -44,6 +46,44 @@ const priorityActions: PriorityActionsDTO = {
       actionDescription: '$82,760 gap to target. Increase contribution $300/mo to save 8 months.',
       actionLabel: 'Claim Now',
       actionHref: '#claim-hsa',
+    },
+  ],
+}
+
+const topQuestions: TopQuestionsDTO = {
+  id: 'top-questions',
+  questionsMessage: 'Top questions from your Peers',
+  subtextType: 'Palantir Cohort - Anonymized',
+  questions: [
+    {
+      id: 'q1',
+      questionText: 'What should I do with my PLTR RSUs when they vest?',
+      actionLabel: 'Ask AI',
+      actionHref: '#ask-ai',
+    },
+    {
+      id: 'q2',
+      questionText: 'What should I do with my PLTR RSUs when they vest?',
+      actionLabel: 'Ask AI',
+      actionHref: '#ask-ai',
+    },
+    {
+      id: 'q3',
+      questionText: 'What should I do with my PLTR RSUs when they vest?',
+      actionLabel: 'Ask AI',
+      actionHref: '#ask-ai',
+    },
+    {
+      id: 'q4',
+      questionText: 'What should I do with my PLTR RSUs when they vest?',
+      actionLabel: 'Ask AI',
+      actionHref: '#ask-ai',
+    },
+    {
+      id: 'q5',
+      questionText: 'What should I do with my PLTR RSUs when they vest?',
+      actionLabel: 'Ask AI',
+      actionHref: '#ask-ai',
     },
   ],
 }
@@ -203,9 +243,18 @@ const retirementTiles: RetirementTileDTO[] = [
   {
     id: 'pltr-rsu',
     title: 'PLTR RSU Program - Morgan Stanley',
-    variant: 'description',
-    amount: 42300.0,
-    description: 'Annual Employer Contribution',
+    variant: 'unvested',
+    unvestedTotalType: 'TOTAL UNVESTED',
+    unvestedSharesText: '4,620',
+    unvestedSharesType: 'shares remaining',
+    unvestedValueType: 'UNVESTED VALUE',
+    unvestedValueText: '$559K',
+    unvestedPriceType: '@ $121.08/share',
+    vestingEvents: [
+      { id: 'vest-1', vestingDate: 'Jun 15, 2024', sharesText: '850 shares', valueText: '-$102,900' },
+      { id: 'vest-2', vestingDate: 'Jun 15, 2024', sharesText: '850 shares', valueText: '-$102,900' },
+      { id: 'vest-3', vestingDate: 'Jun 15, 2024', sharesText: '850 shares', valueText: '-$102,900' },
+    ],
   },
 ]
 
@@ -323,6 +372,50 @@ const compScenarios: CompScenariosDTO = {
     'Scenarios based on 6960 vested PLTR shared. Unvested shared (4620) not included. Educational only - not investment advice.',
 }
 
+const financialGoals: FinancialGoalsDTO = {
+  id: 'financial-goals',
+  financialGoalsTileTitle: 'Financial Goals Timeline',
+  actionLabel: 'Add Milestone',
+  actionHref: '#add-milestone',
+  goals: [
+    {
+      id: 'goal-1',
+      sharesType: 'PLTR RSU Vesting - 850 shares',
+      shareDescription:
+        'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%',
+      goalDate: 'JUN 2024',
+    },
+    {
+      id: 'goal-2',
+      sharesType: 'HSA Contribution deadline',
+      shareDescription:
+        'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%',
+      goalDate: 'JUN 2024',
+    },
+    {
+      id: 'goal-3',
+      sharesType: 'Home Down Payment Goal',
+      shareDescription:
+        'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%',
+      goalDate: 'JUN 2024',
+    },
+    {
+      id: 'goal-4',
+      sharesType: 'Next PLTR Vesting - 850 shares',
+      shareDescription:
+        'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%',
+      goalDate: 'JUN 2024',
+    },
+    {
+      id: 'goal-5',
+      sharesType: 'Early Retirement Target',
+      shareDescription:
+        'Est. $102,000 gross. Plan: sell 40% for texas, allocated 35% to home down payment, hold 25%',
+      goalDate: 'JUN 2024',
+    },
+  ],
+}
+
 export class MockBenefitsRepository implements BenefitsRepository {
   async getSummaryTiles(): Promise<BenefitTileDTO[]> {
     return summaryTiles
@@ -330,6 +423,10 @@ export class MockBenefitsRepository implements BenefitsRepository {
 
   async getPriorityActions(): Promise<PriorityActionsDTO> {
     return priorityActions
+  }
+
+  async getTopQuestions(): Promise<TopQuestionsDTO> {
+    return topQuestions
   }
 
   async getCompTiles(): Promise<CompTileDTO[]> {
@@ -370,5 +467,9 @@ export class MockBenefitsRepository implements BenefitsRepository {
 
   async getCompScenarios(): Promise<CompScenariosDTO> {
     return compScenarios
+  }
+
+  async getFinancialGoals(): Promise<FinancialGoalsDTO> {
+    return financialGoals
   }
 }

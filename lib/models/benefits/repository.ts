@@ -9,17 +9,20 @@ import type {
   CompScenariosDTO,
   CompTileDTO,
   EquityReportDTO,
+  FinancialGoalsDTO,
   HealthTileDTO,
   NetWorthTileDTO,
   PortfolioTileDTO,
   PriorityActionsDTO,
   QuickLinkDTO,
   RetirementTileDTO,
+  TopQuestionsDTO,
 } from '@/lib/types'
 
 export interface BenefitsRepository {
   getSummaryTiles(): Promise<BenefitTileDTO[]>
   getPriorityActions(): Promise<PriorityActionsDTO>
+  getTopQuestions(): Promise<TopQuestionsDTO>
   getCompTiles(): Promise<CompTileDTO[]>
   getPortfolioTiles(): Promise<PortfolioTileDTO[]>
   getQuickLinks(): Promise<QuickLinkDTO[]>
@@ -30,4 +33,5 @@ export interface BenefitsRepository {
   getBalanceSheet(): Promise<BalanceSheetDTO>
   getCompBreakdown(): Promise<CompBreakdownDTO>
   getCompScenarios(): Promise<CompScenariosDTO>
+  getFinancialGoals(): Promise<FinancialGoalsDTO>
 }
